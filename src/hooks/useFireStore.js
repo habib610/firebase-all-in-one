@@ -6,13 +6,16 @@ const useFireStore = (collection) => {
 	const [docsHooks, setDocksHocks] = useState([]);
 
 	useEffect(() => {
-		fireStoreDb.collection(collection).onSnapshot((querySnapShoot) => {
+	const unsubscribe = fireStoreDb
+		.collection(collection)
+		.onSnapshot((querySnapShoot) => {
 			let docs = [];
 			querySnapShoot.forEach((item) => {
 				docs.push(item.data());
 			});
 			setDocksHocks(docs);
 		});
+		return () => unsubscribe();
 	}, [collection]);
 	return { docsHooks };
 };

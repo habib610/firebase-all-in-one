@@ -32,14 +32,18 @@ const UserScreen = () => {
 
 	// listen for real time updates
 	useEffect(() => {
-		fireStoreDb.collection(collection).onSnapshot((querySnapShoot) => {
-			let docs = [];
-			querySnapShoot.forEach((item) => {
-				console.log(item.data());
-				docs.push(item.data());
+		const unsubscribe = fireStoreDb
+			.collection(collection)
+			.onSnapshot((querySnapShoot) => {
+				let docs = [];
+				querySnapShoot.forEach((item) => {
+					console.log(item.data());
+					docs.push(item.data());
+				});
+				setUsersRealtime(docs);
 			});
-			setUsersRealtime(docs);
-		});
+
+		return () => unsubscribe();
 	}, [collection]);
 	console.log(usersRealtime, "realtime");
 
