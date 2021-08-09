@@ -4,7 +4,7 @@ import { fireStoreDb } from "../Firebase/firebaseConfig";
 
 const UserScreen = () => {
 	const [users, setUsers] = useState([]);
-	// const [usersRealtime, setUsersRealtime] = useState([]);
+	const [usersRealtime, setUsersRealtime] = useState([]);
 
 	const [fName, setFName] = useState("");
 	const [lName, setLName] = useState("");
@@ -28,6 +28,19 @@ const UserScreen = () => {
 			});
 	}, []);
 	console.log(users, "not realtime");
+
+	// listen for real time updates
+	useEffect(() => {
+		fireStoreDb.collection(collection).onSnapshot((querySnapShoot) => {
+			let docs = [];
+			querySnapShoot.forEach((item) => {
+				console.log(item.data());
+				docs.push(item.data());
+			});
+			setUsersRealtime(docs);
+		});
+	}, [collection]);
+	console.log(usersRealtime, "realtime");
 
 	return (
 		<Container>
