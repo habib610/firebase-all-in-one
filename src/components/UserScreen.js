@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Form, Row, Button } from "react-bootstrap";
 import { fireStoreDb } from "../Firebase/firebaseConfig";
+import useFireStore from "../hooks/useFireStore";
 
 const UserScreen = () => {
 	const [users, setUsers] = useState([]);
@@ -41,6 +42,10 @@ const UserScreen = () => {
 		});
 	}, [collection]);
 	console.log(usersRealtime, "realtime");
+
+	// listen realtime data update using custom hooks
+	const { docsHooks } = useFireStore(collection);
+	console.log(docsHooks, "realtime using hooks");
 
 	return (
 		<Container>
