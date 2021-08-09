@@ -4,12 +4,31 @@ import { fireStoreDb } from "../Firebase/firebaseConfig";
 
 const UserScreen = () => {
 	const [users, setUsers] = useState([]);
+	// const [usersRealtime, setUsersRealtime] = useState([]);
 
 	const [fName, setFName] = useState("");
 	const [lName, setLName] = useState("");
 	const [born, setBorn] = useState("");
 
 	const submitHandler = (id) => {};
+
+	const collection = "users";
+
+	// not real time update
+	useEffect(() => {
+		fireStoreDb
+			.collection(collection)
+			.get()
+			.then((querySnapShoot) => {
+				let docs = [];
+				querySnapShoot.forEach((item) => {
+					docs.push(item.data());
+				});
+				setUsers(docs);
+			});
+	}, []);
+	console.log(users, "not realtime");
+
 	return (
 		<Container>
 			<h1 className="text-center">All Users</h1>
@@ -17,30 +36,30 @@ const UserScreen = () => {
 				{users.map((item, index) => (
 					<Col key={index} md={6}>
 						<div className="bg-light p-3 m-3">
-							<h4>
+							<p>
 								First Name:
 								<span className="bg-info text-white px-3 ml-4">
 									{item.first}
 								</span>
-							</h4>
-							<h4>
+							</p>
+							<p>
 								Last Name:
 								<span className="bg-info text-white px-3 ml-4">
 									{item.last}
 								</span>
-							</h4>
-							<h4>
+							</p>
+							<p>
 								Born:
 								<span className="bg-info text-white px-3 ml-4">
 									{item.born}
 								</span>
-							</h4>
-							<h4>
+							</p>
+							<p>
 								User Id:
 								<span className="bg-info text-white px-3 ml-4">
 									{item.id}
 								</span>
-							</h4>
+							</p>
 							<Row>
 								<Col md={6} className="mx-auto">
 									<Form>
